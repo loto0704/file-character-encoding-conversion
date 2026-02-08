@@ -1,1 +1,4 @@
-# file-character-encoding-conversion
+# 文字コード変換プログラム
+## 実行方法
+> python main.py -i "ファイルパス" -be 変換前エンコード -ae 変換後エンコード
+
