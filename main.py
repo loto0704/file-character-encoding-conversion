@@ -67,9 +67,9 @@ def log_setting(debug_mode: bool):
 
 
 # ファイルの文字コードを変換
-def concert_encode(file_path, before_encode, after_encode):
+def concert_encode(file_path, before_encode, after_encode, output_folder):
     try:
-        save_path = os.path.join(result_folder_name, os.path.basename(file_path))
+        save_path = os.path.join(output_folder, os.path.basename(file_path))
         with open(file=file_path, mode='r', encoding=before_encode) as bf, \
                 open(file=save_path, mode='w', encoding=after_encode) as af:
             logging.info('読み込みファイル：{}'.format(file_path))
@@ -96,18 +96,19 @@ def main():
         logging.info('変換後エンコード:{}'.format(args.after_encode))
         logging.info('デバッグモード:{}'.format(args.debug_mode))
         file_or_folder = check_file(args.input_data)
-        crt_folder(result_folder_name)
+        result_folder = crt_folder(result_folder_name)  # resultフォルダの作成
+        output_folder = crt_folder(f'{result_folder}/{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}')
         if file_or_folder is None:
             print('ファイル or フォルダを指定ください')
             logging.info('----------ログ終了----------')
             sys.exit(0)
         elif file_or_folder:  # ファイルの場合
-            concert_encode(args.input_data, args.before_encode, args.after_encode)
+            concert_encode(args.input_data, args.before_encode, args.after_encode, output_folder)
         else:  # フォルダの場合
             target_dir = args.input_data
             files = [f for f in os.listdir(target_dir) if os.path.isfile(os.path.join(target_dir, f))]
             for file in files:
-                concert_encode(os.path.join(target_dir, file), args.before_encode, args.after_encode)
+                concert_encode(os.path.join(target_dir, file), args.before_encode, args.after_encode, output_folder)
 
         logging.info('----------ログ終了----------')
 
