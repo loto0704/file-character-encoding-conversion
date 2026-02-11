@@ -103,9 +103,11 @@ def main():
             sys.exit(0)
         elif file_or_folder:  # ファイルの場合
             concert_encode(args.input_data, args.before_encode, args.after_encode)
-        else:
-            print('フォルダは対応していません')
-            sys.exit(0)
+        else:  # フォルダの場合
+            target_dir = args.input_data
+            files = [f for f in os.listdir(target_dir) if os.path.isfile(os.path.join(target_dir, f))]
+            for file in files:
+                concert_encode(os.path.join(target_dir, file), args.before_encode, args.after_encode)
 
         logging.info('----------ログ終了----------')
 
